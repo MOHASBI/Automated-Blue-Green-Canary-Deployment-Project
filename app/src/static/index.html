@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>URL Shortener</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <h1>URL Shortener</h1>
+      <p class="subtitle">Paste a long URL and get a short link.</p>
+
+      <label for="url-input">Destination URL</label>
+      <div class="row">
+        <input
+          id="url-input"
+          type="url"
+          placeholder="https://example.com/very/long/link"
+          autocomplete="off"
+        />
+        <button id="shorten-btn" type="button">Shorten</button>
+      </div>
+
+      <div id="status" class="status"></div>
+
+      <div id="result" class="result">
+        Short link:
+        <a id="short-link" href="#" target="_blank" rel="noopener noreferrer"></a>
+      </div>
+
+      <div class="footer">Backed by FastAPI and DynamoDB.</div>
+    </main>
+
+    <script>
+      const input = document.getElementById("url-input");
+      const button = document.getElementById("shorten-btn");
+      const statusEl = document.getElementById("status");
+      const resultEl = document.getElementById("result");
+      const shortLink = document.getElementById("short-link");
+
+      function setStatus(message, kind = "") {
+        statusEl.textContent = message || "";
+        statusEl.className = "status" + (kind ? " " + kind : "");
+      }
+
+      async function handleShorten() {
+        const url = input.value.trim();
+        resultEl.style.display = "none";
+        shortLink.textContent = "";
+        shortLink.removeAttribute("href");
+
+        if (!url) {
+          setStatus("Please enter a URL.", "error");
+          return;
+        }
+
+        try {
+          new URL(url);
+        } catch {
+          setStatus("Invalid URL.", "error");
+          return;
+        }
+
+        button.disabled = true;
+        setStatus("Creating short link...");
+
+        try {
+          const resp = await fetch("/shorten", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ url }),
+          });
+
+          if (!resp.ok) {
+            const err = await resp.json().catch(() => ({}));
+            throw new Error(err.detail || "Request failed");
+          }
+
+          const data = await resp.json();
+          const origin = window.location.origin;
+          const fullShort = origin + "/" + data.short;
+
+          shortLink.textContent = fullShort;
+          shortLink.href = fullShort;
+          resultEl.style.display = "block";
+          setStatus("Short link ready.", "success");
+        } catch (err) {
+          console.error(err);
+          setStatus(err.message || "Something went wrong.", "error");
+        } finally {
+          button.disabled = false;
+        }
+      }
+
+      button.addEventListener("click", handleShorten);
+      input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          handleShorten();
+        }
+      });
+    </script>
+  </body>
+  </html>
+
