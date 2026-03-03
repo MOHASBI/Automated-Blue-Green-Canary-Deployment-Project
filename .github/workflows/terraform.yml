@@ -55,4 +55,6 @@ jobs:
         with:
           sarif_file: trivy-results.sarif
 
-      
+      - name: Push to ECR
+        run: |
+          docker push ${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
