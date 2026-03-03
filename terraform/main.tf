@@ -46,3 +46,31 @@ module "iam" {
   ecs_task_role_name       = var.ecs_task_role_name
   dynamodb_table_arn       = module.dynamodb.table_arn
 }
+
+module "ecs" {
+  source = "./modules/ECS"
+
+  ecr_repo_url              = module.ecr.ecr_repo_url
+  private_subnets_id        = module.vpc.private_subnets_id
+  vpc_id                    = module.vpc.vpc_id
+  alb_sg_id                 = module.alb.alb_sg_id
+  target_group_arn          = module.alb.blue_target_group_arn
+  ecs_task_execution_role_arn = module.iam.ecs_task_execution_role_arn
+  ecs_task_role_arn         = module.iam.ecs_task_role_arn
+  aws_region                = var.aws_region
+  task_cpu                  = var.task_cpu
+  task_memory               = var.task_memory
+  container_port            = var.container_port
+  operating_system_family   = var.operating_system_family
+  cpu_architecture          = var.cpu_architecture
+  log_group_name            = "${var.project_name}-logs"
+  log_retention_in_days     = var.log_retention_in_days
+  task_family               = "${var.project_name}-task"
+  image_tag                 = var.image_tag
+  container_name            = "${var.project_name}-container"
+  service_name              = "${var.project_name}-service"
+  desired_count             = var.desired_count
+  availability_zone_rebalancing = var.availability_zone_rebalancing
+  cluster_name              = "${var.project_name}-cluster"
+  deployment_controller_type = "CODE_DEPLOY"
+}
