@@ -49,8 +49,8 @@ module "iam" {
 
 module "ecs" {
   source = "./modules/ECS"
-
-  ecr_repo_url              = module.ecr.ecr_repo_url
+  
+  ecr_repo_url              = data.terraform_remote_state.bootstrap.outputs.ecr_repository_url
   private_subnets_id        = module.vpc.private_subnets_id
   vpc_id                    = module.vpc.vpc_id
   alb_sg_id                 = module.alb.alb_sg_id
@@ -86,4 +86,13 @@ module "codedeploy" {
   app_name                 = var.app_name
   deployment_group_name    = var.deployment_group_name
   codedeploy_service_role_arn = module.iam.codedeploy_role_arn
+}
+
+data "terraform_remote_state" "bootstrap" {
+      backend = "s3"
+  config = {
+        bucket = "blue-green-848153448908-tf-state"
+    key    = "Bootstrap/terraform.tfstate"
+    region = "eu-west-2"
+  }
 }
