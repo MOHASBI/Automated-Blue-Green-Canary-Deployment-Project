@@ -74,3 +74,16 @@ module "ecs" {
   cluster_name              = "${var.project_name}-cluster"
   deployment_controller_type = "CODE_DEPLOY"
 }
+
+module "codedeploy" {
+  source = "./modules/codedeploy"
+
+  cluster_name             = module.ecs.cluster_name
+  service_name             = module.ecs.service_name
+  listener_arn             = module.alb.https_listener_arn
+  blue_tg_name             = module.alb.blue_tg_name
+  green_tg_name            = module.alb.green_tg_name
+  app_name                 = var.app_name
+  deployment_group_name    = var.deployment_group_name
+  codedeploy_service_role_arn = module.iam.codedeploy_role_arn
+}
