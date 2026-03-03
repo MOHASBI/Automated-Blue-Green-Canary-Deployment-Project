@@ -1,0 +1,19 @@
+name: Terraform
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Action'
+        required: true
+        type: choice
+        options: [apply, destroy]
+      confirm:
+        description: 'Type CONFIRM'
+        required: true
+        type: string
+
+permissions:
+  id-token: write
+  contents: read
+  security-events: write
