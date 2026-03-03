@@ -1,0 +1,22 @@
+name: Build and Push to ECR
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['app/**']
+
+permissions:
+  id-token: write
+  contents: read
+  security-events: write
+
+jobs:
+  build-and-push:
+    name: Build and Push
+    runs-on: ubuntu-latest
+    env:
+      ECR_REPOSITORY: url-shortener
+      AWS_REGION: eu-west-2
+    
+    
