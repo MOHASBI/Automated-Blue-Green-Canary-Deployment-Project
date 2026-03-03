@@ -31,3 +31,8 @@ module "alb" {
   record_type       = var.record_type
   load_balancer_type = var.load_balancer_type
 }
+
+module "dynamodb" {
+  source     = "./modules/dynamodb"
+  table_name = var.table_name
+}
