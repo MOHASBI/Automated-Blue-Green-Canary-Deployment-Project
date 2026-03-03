@@ -44,3 +44,19 @@ jobs:
         run: |
           tflint --init
           tflint --recursive
+
+      - name: Run Checkov
+        if: matrix.scanner == 'checkov'
+        uses: bridgecrewio/checkov-action@master
+        with:
+          directory: terraform/
+          framework: terraform
+          output_format: sarif
+          output_file_path: checkov-results.sarif
+          soft_fail: true #temp
+
+      - name: Upload Checkov results
+        if: matrix.scanner == 'checkov' && always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: checkov-results.sarif
