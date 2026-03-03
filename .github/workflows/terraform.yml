@@ -60,7 +60,7 @@ jobs:
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: checkov-results.sarif
-          
+
     terraform:
     name: Terraform
     needs: scan
