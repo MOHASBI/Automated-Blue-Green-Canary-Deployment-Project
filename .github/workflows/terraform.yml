@@ -61,7 +61,7 @@ jobs:
         with:
           sarif_file: checkov-results.sarif
 
-    terraform:
+  terraform:
     name: Terraform
     needs: scan
     runs-on: ubuntu-latest
