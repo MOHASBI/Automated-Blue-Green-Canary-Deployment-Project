@@ -36,3 +36,13 @@ module "dynamodb" {
   source     = "./modules/dynamodb"
   table_name = var.table_name
 }
+
+module "iam" {
+  source = "./modules/IAM"
+
+  ecs_execution_role_name  = var.ecs_execution_role_name
+  ecs_execution_policy_arn = var.ecs_execution_policy_arn
+  task_service_principals  = var.task_service_principals
+  ecs_task_role_name       = var.ecs_task_role_name
+  dynamodb_table_arn       = module.dynamodb.table_arn
+}
