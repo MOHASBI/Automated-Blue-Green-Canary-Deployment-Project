@@ -1,3 +1,14 @@
+terraform {
+  required_version = ">= 1.6.0, < 2.0.0"
+
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+}
+
 resource "aws_codedeploy_app" "url_shortener_codedeploy_app" {
   compute_platform = "ECS"
   name             = var.app_name
