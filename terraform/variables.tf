@@ -95,7 +95,7 @@ variable "load_balancer_type" {
 
 variable "domain_name" {
   type    = string
-  default = "tm.mohamedhassanproject.com"
+  default = "AsterixHealth.mohamedhassanproject.com"
 }
 
 variable "private_zone" {
