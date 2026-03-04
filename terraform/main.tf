@@ -1,5 +1,5 @@
 module "vpc" {
-  source = "./modules/VPC"
+  source = "./modules/vpc"
 
   region              = var.aws_region
   public_subnet_cidrs = var.public_subnet_cidrs
@@ -49,7 +49,7 @@ module "iam" {
 
 module "ecs" {
   source = "./modules/ECS"
-  
+
   ecr_repo_url              = data.terraform_remote_state.bootstrap.outputs.ecr_repository_url
   private_subnets_id        = module.vpc.private_subnets_id
   vpc_id                    = module.vpc.vpc_id
