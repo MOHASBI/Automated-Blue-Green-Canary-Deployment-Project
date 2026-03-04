@@ -1,0 +1,13 @@
+name: Deploy to ECS
+
+on:
+  workflow_dispatch:
+    inputs:
+      image-tag:
+        description: 'Image tag (leave empty for latest)'
+        required: false
+        type: string
+
+permissions:
+  id-token: write
+  contents: read
