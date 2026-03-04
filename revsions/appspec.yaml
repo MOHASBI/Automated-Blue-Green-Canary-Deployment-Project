@@ -1,0 +1,10 @@
+version: 1
+Resources:
+  - TargetService:
+      Type: AWS::ECS::Service
+      Properties:
+        TaskDefinition: arn:aws:ecs:eu-west-2:848153448908:task-definition/blue-green-app
+        LoadBalancerInfo:
+          ContainerName: ecs-url-shortener-container
+          ContainerPort: 8000
+        PlatformVersion: LATEST
