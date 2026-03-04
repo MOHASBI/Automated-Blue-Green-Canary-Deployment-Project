@@ -65,4 +65,16 @@ jobs:
           sed -i "s|TaskDefinition: \".*\"|TaskDefinition: \"${{ steps.task.outputs.arn }}\"|g" revisions/appspec.yml
           aws s3 cp revisions/appspec.yml s3://${{ env.S3_BUCKET }}/appspec.yml
 
-     
+      - name: Create deployment
+        id: deploy
+        run: |
+          ID=$(aws deploy create-deployment \
+            --application-name ${{ env.CODEDEPLOY_APP }} \
+            --deployment-group-name ${{ env.CODEDEPLOY_GROUP }} \
+            --s3-location bucket=${{ env.S3_BUCKET }},key=appspec.yml,bundleType=YAML \
+            --query deploymentId --output text)
+          echo "id=$ID" >> $GITHUB_OUTPUT
+
+      - name: Wait for deployment
+        run: |
+          aws deploy wait deployment-successful --deployment-id ${{ steps.deploy.outputs.id }}
