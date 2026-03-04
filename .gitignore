@@ -8,3 +8,5 @@ __pycache__/
 .plan
 
 **/.terraform/
+
+**/.terraform.lock.hcl
