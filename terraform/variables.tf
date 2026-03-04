@@ -80,7 +80,7 @@ variable "zone_name" {
 
 variable "record_name" {
   type    = string
-  default = "tm"
+  default = "AsterixHealth"
 }
 
 variable "record_type" {
