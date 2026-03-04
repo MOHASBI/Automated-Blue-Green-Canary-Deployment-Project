@@ -16,7 +16,7 @@ jobs:
     name: Build and Push
     runs-on: ubuntu-latest
     env:
-      ECR_REPOSITORY: url-shortener
+      ECR_REPOSITORY: blue-green-app
       AWS_REGION: eu-west-2
     
     steps:
