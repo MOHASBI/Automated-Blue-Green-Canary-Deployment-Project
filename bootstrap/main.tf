@@ -1,13 +1,4 @@
-terraform {
-  required_version = ">= 1.6.0, < 2.0.0"
 
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 6.0"
-    }
-  }
-}
 resource "aws_s3_bucket" "tf_state" {
   bucket = var.tf_state_bucket_name
 
