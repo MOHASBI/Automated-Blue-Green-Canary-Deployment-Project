@@ -94,7 +94,7 @@ jobs:
           terraform_version: 1.8.5
 
       - name: Terraform init
-        run: terraform init 
+        run: terraform init -reconfigure
 
       - name: Terraform plan
         run: |
