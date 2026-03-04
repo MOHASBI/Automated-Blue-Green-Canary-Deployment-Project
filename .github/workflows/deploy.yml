@@ -45,4 +45,24 @@ jobs:
           IMAGE_URI="$REGISTRY/url-shortener:$TAG"
           echo "uri=$IMAGE_URI" >> $GITHUB_OUTPUT
 
+      - name: Get current task definition
+        run: |
+          aws ecs describe-task-definition --task-definition ${{ env.ECS_TASK_FAMILY }} --query taskDefinition > task-def.json
+          jq 'del(.taskDefinitionArn, .revision, .status, .requiresAttributes, .compatibilities, .registeredAt, .registeredBy)' task-def.json > task-def-clean.json
+
+      - name: Update task definition
+        run: |
+          jq --arg img "${{ steps.image.outputs.uri }}" '.containerDefinitions[0].image = $img' task-def-clean.json > new-task-def.json
+
+      - name: Register task definition
+        id: task
+        run: |
+          ARN=$(aws ecs register-task-definition --cli-input-json file://new-task-def.json --query 'taskDefinition.taskDefinitionArn' --output text)
+          echo "arn=$ARN" >> $GITHUB_OUTPUT
+
+      - name: Update appspec.yml
+        run: |
+          sed -i "s|TaskDefinition: \".*\"|TaskDefinition: \"${{ steps.task.outputs.arn }}\"|g" revisions/appspec.yml
+          aws s3 cp revisions/appspec.yml s3://${{ env.S3_BUCKET }}/appspec.yml
+
      
