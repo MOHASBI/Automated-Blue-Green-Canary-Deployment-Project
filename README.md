@@ -25,3 +25,7 @@ The design keeps workloads private by using VPC endpoints and it avoids NAT to r
 ![OIDC trust policy](images/OIDC%20Trust%20Policy.png)
 
 
+## Security and Guardrails
+
+AWS WAF sits in front of the ALB and it uses managed rules to reduce exposure to common web attacks. The ALB terminates TLS using ACM managed certificates and it redirects HTTP traffic to HTTPS. GitHub Actions authenticates to AWS using OIDC so credentials are short lived and scoped through the role trust policy. IAM permissions are least privilege and they are scoped to the resources that the pipelines must manage. ECS tasks run in private subnets and the service only accepts inbound traffic from the ALB security group. Access to AWS services is routed through VPC endpoints so the platform avoids NAT and reduces egress cost.
+
