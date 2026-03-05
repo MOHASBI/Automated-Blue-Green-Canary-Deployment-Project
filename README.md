@@ -50,7 +50,22 @@ You must define this GitHub repository secret before running pipelines:
    terraform plan
    terraform apply
    ```
-4. Push changes to `app/**` or run CI manually so the image builds and scans and pushes to ECR.
+4. Push changes to `app/**` or run CI manually so the image builds, scans and pushes to ECR.
 5. Run the deploy workflow so it registers a new task definition and starts blue green deployment through CodeDeploy.
+
+
+## CI CD and Deployment Flow
+
+1. The CI workflow builds a Docker image from `app/` and it scans the image using Trivy. It then pushes the image to ECR under `blue-green-app` and it tags the image with the short commit SHA.
+2. The Terraform workflow runs TFLint and Checkov and it then runs Terraform plan and apply to update the platform safely.
+3. The deploy workflow resolves an image URI from the provided tag or it selects the latest image in ECR. It registers a new ECS task definition revision and it updates `revisions/appspec.yml` with the new task definition ARN. It then triggers a CodeDeploy ECS blue green deployment and it waits for the deployment to complete.
+
+### CodeDeploy lifecycle visuals
+
+![CodeDeploy step 1](images/CodeDeployStep1.png)
+![CodeDeploy step 2](images/CodeDeployStep2.png)
+![CodeDeploy step 3](images/CodeDeployStep3.png)
+![CodeDeploy step 4](images/CodeDeployStep4.png)
+
 
 
