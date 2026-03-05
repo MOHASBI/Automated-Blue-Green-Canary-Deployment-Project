@@ -70,13 +70,12 @@ You must define this GitHub repository secret before running pipelines:
 ## Repository Layout
 
 Automated-Blue-Green-Canary-Deployment-Project/
-|
-├── app/                    # FastAPI service, static frontend, and Dockerfile
-├── bootstrap/              # Foundation Terraform (state bucket, lock table, OIDC role, ECR)
-├── terraform/              # Main Terraform stack and reusable modules
-├── revisions/              # CodeDeploy AppSpec template
-├── images/                 # Architecture diagrams and deployment screenshots
-├── .github/workflows/      # CI, Terraform, and Deploy pipelines
+├── app/                 # FastAPI service, static frontend, and Dockerfile
+├── bootstrap/           # Foundation Terraform (state bucket, lock table, OIDC role, ECR)
+├── terraform/           # Main Terraform stack and reusable modules
+├── revisions/           # CodeDeploy AppSpec template
+├── images/              # Architecture diagrams and deployment screenshots
+├── .github/workflows/   # CI, Terraform, and deploy pipelines
 ├── .gitignore
 └── README.md
 
