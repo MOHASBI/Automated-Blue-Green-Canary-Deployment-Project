@@ -39,9 +39,9 @@ jobs:
           if [ -n "${{ inputs.image-tag }}" ]; then
             TAG="${{ inputs.image-tag }}"
           else
-            TAG=$(aws ecr describe-images --repository-name url-shortener --query 'sort_by(imageDetails,& imagePushedAt)[-1].imageTags[0]' --output text)
+            TAG=$(aws ecr describe-images --repository-name blue-green-app --query 'sort_by(imageDetails,& imagePushedAt)[-1].imageTags[0]' --output text)
           fi
-          REGISTRY=$(aws ecr describe-repositories --repository-names url-shortener --query 'repositories[0].repositoryUri' --output text | cut -d'/' -f1)
+          REGISTRY=$(aws ecr describe-repositories --repository-names blue-green-app --query 'repositories[0].repositoryUri' --output text | cut -d'/' -f1)
           IMAGE_URI="$REGISTRY/blue-green-app:$TAG"
           echo "uri=$IMAGE_URI" >> $GITHUB_OUTPUT
 
