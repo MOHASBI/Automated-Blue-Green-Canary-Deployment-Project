@@ -2,6 +2,10 @@ variable "ecr_repo_url" {
   type = string
 }
 
+variable "table_name" {
+  type = string
+}
+
 variable "private_subnets_id" {
   type = list(string)
 }

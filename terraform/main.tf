@@ -52,6 +52,7 @@ module "ecs" {
   source = "./modules/ECS"
 
   ecr_repo_url              = data.terraform_remote_state.bootstrap.outputs.ecr_repository_url
+  table_name                = module.dynamodb.table_name
   private_subnets_id        = module.vpc.private_subnets_id
   vpc_id                    = module.vpc.vpc_id
   alb_sg_id                 = module.alb.alb_sg_id

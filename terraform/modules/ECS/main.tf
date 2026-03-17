@@ -43,6 +43,12 @@ resource "aws_ecs_task_definition" "task_definition" {
           protocol      = var.container_protocol
         }
       ]
+      environment = [
+        {
+          name  = "TABLE_NAME"
+          value = var.table_name
+        }
+      ]
 
       logConfiguration = {
         logDriver = "awslogs"
