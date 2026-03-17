@@ -2,11 +2,6 @@ name: Deploy to ECS
 
 on:
   workflow_dispatch:
-    inputs:
-      image-tag:
-        description: 'Image tag (leave empty for latest)'
-        required: false
-        type: string
 
 permissions:
   id-token: write
@@ -36,10 +31,10 @@ jobs:
       - name: Get image URI
         id: image
         run: |
-          if [ -n "${{ inputs.image-tag }}" ]; then
-            TAG="${{ inputs.image-tag }}"
-          else
-            TAG=$(aws ecr describe-images --repository-name blue-green-app --query 'sort_by(imageDetails,& imagePushedAt)[-1].imageTags[0]' --output text)
+          TAG=$(aws ecr describe-images --repository-name blue-green-app --query 'sort_by(imageDetails,& imagePushedAt)[-1].imageTags[0]' --output text)
+          if [ -z "$TAG" ] || [ "$TAG" = "None" ]; then
+            echo "No deployable image tag found in ECR repository blue-green-app"
+            exit 1
           fi
           REGISTRY=$(aws ecr describe-repositories --repository-names blue-green-app --query 'repositories[0].repositoryUri' --output text | cut -d'/' -f1)
           IMAGE_URI="$REGISTRY/blue-green-app:$TAG"

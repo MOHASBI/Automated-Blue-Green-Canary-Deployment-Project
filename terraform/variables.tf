@@ -80,7 +80,7 @@ variable "zone_name" {
 
 variable "record_name" {
   type    = string
-  default = "tm"
+  default = "undo"
 }
 
 variable "record_type" {
@@ -95,7 +95,7 @@ variable "load_balancer_type" {
 
 variable "domain_name" {
   type    = string
-  default = "tm.mohamedhassanproject.com"
+  default = "undo.mohamedhassanproject.com"
 }
 
 variable "private_zone" {
